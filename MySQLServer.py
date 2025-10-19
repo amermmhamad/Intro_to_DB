@@ -1,8 +1,4 @@
 # MySQLServer.py
-# Creates the MySQL database alx_book_store (idempotent).
-# Usage:
-#   python MySQLServer.py --host 127.0.0.1 --user root --password mypass --port 3306
-
 import sys
 import argparse
 
@@ -13,43 +9,37 @@ except ImportError:
     sys.exit(1)
 
 def main():
-    parser = argparse.ArgumentParser(description="Create MySQL database alx_book_store if it does not exist.")
-    parser.add_argument("--host", default="127.0.0.1", help="MySQL host (default: 127.0.0.1)")
-    parser.add_argument("--user", required=True, help="MySQL username")
-    parser.add_argument("--password", required=True, help="MySQL password")
-    parser.add_argument("--port", type=int, default=3306, help="MySQL port (default: 3306)")
+    parser = argparse.ArgumentParser(description="Create database alx_book_store if it does not exist.")
+    parser.add_argument("--host", default="127.0.0.1")
+    parser.add_argument("--user", required=True)
+    parser.add_argument("--password", required=True)
+    parser.add_argument("--port", type=int, default=3306)
     args = parser.parse_args()
 
     conn = None
     cursor = None
     try:
-        # Connect to the server without selecting a database
         conn = mysql.connector.connect(
             host=args.host,
             user=args.user,
             password=args.password,
             port=args.port
         )
-
         if not conn.is_connected():
             print("Error: Failed to connect to the MySQL server.")
             sys.exit(1)
 
         cursor = conn.cursor()
-        # No SELECT or SHOW statements; idempotent creation
         cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store;")
         conn.commit()
-
         print("Database 'alx_book_store' created successfully!")
     except mysql.connector.Error as e:
-        # This exact clause satisfies the checker
         print(f"Error: {e}")
         sys.exit(1)
     except Exception as e:
         print(f"Unexpected error: {e}")
         sys.exit(1)
     finally:
-        # Clean up resources
         try:
             if cursor is not None:
                 cursor.close()
