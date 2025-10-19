@@ -22,11 +22,7 @@ CREATE TABLE Books (
   price DOUBLE NOT NULL,
   publication_date DATE,
   PRIMARY KEY (book_id),
-  CONSTRAINT fk_books_authors
-    FOREIGN KEY (author_id)
-    REFERENCES Authors (author_id)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT
+  CONSTRAINT fk_books_authors FOREIGN KEY (author_id) REFERENCES Authors(author_id)
 ) ENGINE=INNODB;
 
 CREATE TABLE Orders (
@@ -34,11 +30,7 @@ CREATE TABLE Orders (
   customer_id INT UNSIGNED NOT NULL,
   order_date DATE NOT NULL,
   PRIMARY KEY (order_id),
-  CONSTRAINT fk_orders_customers
-    FOREIGN KEY (customer_id)
-    REFERENCES Customers (customer_id)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT
+  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
 ) ENGINE=INNODB;
 
 CREATE TABLE Order_Details (
@@ -47,14 +39,6 @@ CREATE TABLE Order_Details (
   book_id INT UNSIGNED NOT NULL,
   quantity DOUBLE NOT NULL,
   PRIMARY KEY (orderdetailid),
-  CONSTRAINT fk_order_details_orders
-    FOREIGN KEY (order_id)
-    REFERENCES Orders (order_id)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT,
-  CONSTRAINT fk_order_details_books
-    FOREIGN KEY (book_id)
-    REFERENCES Books (book_id)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT
+  CONSTRAINT fk_order_details_orders FOREIGN KEY (order_id) REFERENCES Orders(order_id),
+  CONSTRAINT fk_order_details_books FOREIGN KEY (book_id) REFERENCES Books(book_id)
 ) ENGINE=INNODB;
